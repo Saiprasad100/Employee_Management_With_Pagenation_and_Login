@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Register User</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <style>
+        .card {
+            max-width: 600px; /* Adjust the width of the card */
+            margin: 20px auto; /* Center the card with some space */
+        }
+        .card-header, .card-footer {
+            padding: 10px; /* Reduce padding for smaller size */
+        }
+        .card-body {
+            padding: 15px; /* Adjust body padding */
+        }
+    </style>
+
+    <script>
+        // JavaScript to capitalize the first letter of firstName and lastName fields
+        function capitalizeFirstLetter(event) {
+            let value = event.target.value;
+            event.target.value = value.charAt(0).toUpperCase() + value.slice(1);
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-info text-black">
+            <h3 class="text-center" style="font-size: 1.5rem;">USER REGISTRATION</h3>
+        </div>
+
+        <div class="card-body">
+            <!-- Form -->
+            <form th:action="@{/user/save}" method="POST" th:object="${user}">
+                <input type="hidden" th:field="*{id}"/>
+
+                <!-- First Name -->
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="firstName">First Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" th:field="*{firstName}" id="firstName" class="form-control" 
+                               placeholder="Enter First Name" minlength="4" maxlength="30" required 
+                               oninput="capitalizeFirstLetter(event)"/>
+                    </div>
+                </div>
+
+                <!-- Last Name -->
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="lastName">Last Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" th:field="*{lastName}" id="lastName" class="form-control" 
+                               placeholder="Enter Last Name" minlength="3" maxlength="15" required 
+                               oninput="capitalizeFirstLetter(event)">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="email" th:field="*{email}" id="email" class="form-control" 
+                               placeholder="Enter Email" required/>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="col-8">
+                        <input type="password" th:field="*{password}" id="password" class="form-control" 
+                               placeholder="Enter Password" minlength="8" maxlength="15" required/>
+                    </div>
+                </div>
+
+                <!-- Captcha -->
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label for="captchaImage">Captcha</label>
+                    </div>
+                    <div class="col-8">
+                        <img th:src="*{'data:realCaptcha/jpg;base64,'+ realCaptcha}" id="captchaImage" class="img-fluid"/>
+                    </div>
+                </div>
+                
+                <!-- Captcha Input -->
+                <div class="row mb-3">
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                        <input type="hidden" th:field="*{hiddenCaptcha}"/>
+                        <input type="text" th:field="*{captcha}" id="captcha" class="form-control" 
+                               placeholder="Enter Captcha" required/>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->   
+                <div class="text-center">
+                    <input type="submit" value="Register" class="btn btn-success" />
+                </div>
+            </form>
+        </div>
+
+        <!-- Message Section -->
+        <div th:if="${message != null}" class="card-footer bg-info">
+            <span th:classappend="${message.contains('success') ? 'alert alert-success' : 'alert alert-danger'}" 
+                  th:text="${message}"></span>
+        </div>
+    </div>
+    <div class="pt-3 text-center">
+        <a href="allUsers" class="btn btn-primary">View All Users</a>
+    </div>
+</div>
+</body>
+</html>
